@@ -18,14 +18,17 @@ namespace ex30
             while (isGameOver)
             {
                 char[,] map = DrawMap();
+
                 Console.SetCursorPosition(userY, userX);
                 Console.Write('@');
                 ConsoleKeyInfo pressedKey = Console.ReadKey();
+
                 isStarTaken = MoveHero(map, pressedKey, ref userX, ref userY, isStarTaken);
 
                 if (isStarTaken == false)
                 {
-                    map = DrawMap();
+                    DrawMap();
+
                     Console.SetCursorPosition(userY, userX);
                     Console.Write('@');
                     Console.SetCursorPosition(0, 8);
@@ -37,6 +40,7 @@ namespace ex30
 
         static char[,] DrawMap()
         {
+            Console.SetCursorPosition(0, 0);
             Console.CursorVisible = false;
             char[,] map = {
                 {'#','#','#','#','#','#','#','#','#','#','#','#','#','#'},
@@ -49,7 +53,7 @@ namespace ex30
                 {'#','#','#','#','#','#','#','#','#','#','#','#','#','#'}
             };
 
-            Console.SetCursorPosition(0, 0);
+
             for (int i = 0; i < map.GetLength(0); i++)
             {
                 for (int j = 0; j < map.GetLength(1); j++)
