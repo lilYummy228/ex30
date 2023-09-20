@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace ex30
 {
@@ -60,6 +55,7 @@ namespace ex30
                 {
                     Console.Write(map[i, j]);
                 }
+
                 Console.WriteLine();
             }
 
@@ -69,6 +65,7 @@ namespace ex30
         static bool MoveHero(char[,] map, ConsoleKeyInfo pressedKey, ref int userX, ref int userY, bool isStarTaken)
         {
             int[] direction = GetDirection(pressedKey);
+
             int nextUserPositionX = userX + direction[0];
             int nextUserPositionY = userY + direction[1];
 
