@@ -84,6 +84,7 @@ namespace ex30
 
             return isStarTaken;
         }
+
         static int[] GetDirection(ConsoleKeyInfo pressedKey)
         {
             int[] direction = { 0, 0 };
