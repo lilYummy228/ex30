@@ -6,27 +6,28 @@ namespace ex30
     {
         static void Main(string[] args)
         {
-            int userX = 1, userY = 1;
+            int userPositionX = 1, userPositionY = 1;
             bool isGameOver = true;
             bool isStarTaken = true;
+            char hero = '@';
 
             while (isGameOver)
             {
                 char[,] map = DrawMap();
 
-                Console.SetCursorPosition(userY, userX);
-                Console.Write('@');
+                Console.SetCursorPosition(userPositionY, userPositionX);
+                Console.Write(hero);
                 ConsoleKeyInfo pressedKey = Console.ReadKey();
 
-                isStarTaken = MoveHero(map, pressedKey, ref userX, ref userY, isStarTaken);
+                isStarTaken = MoveHero(map, pressedKey, ref userPositionX, ref userPositionY, isStarTaken);
 
                 if (isStarTaken == false)
                 {
                     DrawMap();
 
-                    Console.SetCursorPosition(userY, userX);
-                    Console.Write('@');
-                    Console.SetCursorPosition(0, 22);
+                    Console.SetCursorPosition(userPositionY, userPositionX);
+                    Console.Write(hero);
+                    Console.SetCursorPosition(0, 21);
                     Console.WriteLine("Вы собрали звезду! Уровень пройден!");
                     isGameOver = false;
                 }
@@ -37,29 +38,8 @@ namespace ex30
         {
             Console.SetCursorPosition(0, 0);
             Console.CursorVisible = false;
-            char[,] map = {
-                {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#'},
-                {'#',' ','#',' ',' ',' ',' ',' ','#',' ',' ','X',' ',' ',' ',' ','#',' ',' ',' ','X','#'},
-                {'#',' ','#',' ','#','#','#',' ','#',' ','#','#',' ','#','#','X',' ',' ','#',' ','#','#'},
-                {'#',' ','#',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ','#','#',' ','#','#',' ',' ','#'},
-                {'#',' ','#','#','#',' ','#','#','#',' ',' ',' ','#',' ',' ',' ',' ','#','#','#',' ','#'},
-                {'#',' ',' ',' ',' ',' ',' ','X',' ',' ','#','#','#',' ','#','#','#','#',' ','#',' ','#'},
-                {'#',' ','#','#','#',' ','#','#','#',' ','#',' ',' ',' ',' ',' ',' ',' ','X','#',' ','#'},
-                {'#',' ','#',' ','#',' ','#',' ',' ',' ','#',' ','#',' ','#',' ','#','#',' ','#',' ','#'},
-                {'#',' ','#',' ',' ',' ','#',' ','#',' ','#',' ','#','X','#',' ',' ','X',' ',' ',' ','#'},
-                {'#',' ','#','#','#','X',' ',' ','#',' ','#',' ',' ',' ','#',' ','#','#','#','#',' ','#'},
-                {'#',' ',' ',' ','#','#','#','#','#',' ','#','#','#',' ','#',' ','#',' ',' ',' ',' ','#'},
-                {'#',' ','#',' ','#','X',' ',' ',' ',' ',' ',' ',' ',' ','#',' ','#',' ','#','#','X','#'},
-                {'#',' ','#',' ','#','#',' ','#','#','#',' ','#','#',' ',' ',' ','#',' ','#','*','#','#'},
-                {'#',' ','#',' ',' ','X',' ',' ','X','#',' ','#','#',' ','#','#','#',' ','X',' ',' ','#'},
-                {'#',' ','#',' ','#','#',' ','#',' ','#',' ','#','#',' ','#','#','#',' ','#','#',' ','#'},
-                {'#',' ','#',' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ','#',' ',' ',' ','X',' ',' ','#'},
-                {'#',' ','#',' ','#','#','#','#','#','#',' ','#','X','#','#',' ','#','#','#',' ','#','#'},
-                {'#',' ','#',' ','X',' ',' ',' ','#',' ',' ','#',' ',' ',' ',' ',' ',' ','#',' ',' ','#'},
-                {'#',' ','#','#','#','#','#',' ','#',' ','#','#',' ','#','#','#','#','X','#','#',' ','#'},
-                {'#',' ',' ',' ',' ',' ',' ',' ','#',' ',' ','X',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-                {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#'}
-            };
+
+            char[,] map = CreateMap();
 
             for (int i = 0; i < map.GetLength(0); i++)
             {
@@ -74,33 +54,36 @@ namespace ex30
             return map;
         }
 
-        static bool MoveHero(char[,] map, ConsoleKeyInfo pressedKey, ref int userX, ref int userY, bool isStarTaken)
+        static bool MoveHero(char[,] map, ConsoleKeyInfo pressedKey, ref int userPositionX, ref int userPositionY, bool isStarTaken)
         {
             int[] direction = GetDirection(pressedKey);
 
-            int nextUserPositionX = userX + direction[0];
-            int nextUserPositionY = userY + direction[1];
+            char wall = '#';
+            char enemy = 'X';
+            char star = '*';
+            int nextUserPositionX = userPositionX + direction[0];
+            int nextUserPositionY = userPositionY + direction[1];
 
-            if (map[nextUserPositionX, nextUserPositionY] == ' ')
+            if (map[nextUserPositionX, nextUserPositionY] != wall)
             {
-                userX = nextUserPositionX;
-                userY = nextUserPositionY;
-            }
-            else if (map[nextUserPositionX, nextUserPositionY] == 'X')
-            {
-                userX = 1;
-                userY = 1;
-            }
-            else if (map[nextUserPositionX, nextUserPositionY] == '*')
-            {
-                userX = nextUserPositionX;
-                userY = nextUserPositionY;
-                isStarTaken = false;
+                userPositionX = nextUserPositionX;
+                userPositionY = nextUserPositionY;
+
+                if (map[userPositionX, userPositionY] == enemy)
+                {
+                    userPositionX = 1;
+                    userPositionY = 1;
+                }
+                else if (map[userPositionX, userPositionY] == star)
+                {
+                    userPositionX = nextUserPositionX;
+                    userPositionY = nextUserPositionY;
+                    isStarTaken = false;
+                }
             }
 
             return isStarTaken;
         }
-
         static int[] GetDirection(ConsoleKeyInfo pressedKey)
         {
             int[] direction = { 0, 0 };
@@ -125,6 +108,34 @@ namespace ex30
             }
 
             return direction;
+        }
+
+        static char[,] CreateMap()
+        {
+            char[,] map = {
+                {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#'},
+                {'#',' ','#',' ',' ',' ',' ',' ','#',' ',' ','X',' ',' ',' ',' ','#',' ',' ',' ','X','#'},
+                {'#',' ','#',' ','#','#','#',' ','#',' ','#','#',' ','#','#','X',' ',' ','#',' ','#','#'},
+                {'#',' ','#',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ','#','#',' ','#','#',' ',' ','#'},
+                {'#',' ','#','#','#',' ','#','#','#',' ',' ',' ','#',' ',' ',' ',' ','#','#','#',' ','#'},
+                {'#',' ',' ',' ',' ',' ',' ','X',' ',' ','#','#','#',' ','#','#','#','#',' ','#',' ','#'},
+                {'#',' ','#','#','#',' ','#','#','#',' ','#',' ',' ',' ',' ',' ',' ',' ','X','#',' ','#'},
+                {'#',' ','#',' ','#',' ','#',' ',' ',' ','#',' ','#',' ','#',' ','#','#',' ','#',' ','#'},
+                {'#',' ','#',' ',' ',' ','#',' ','#',' ','#',' ','#','X','#',' ',' ','X',' ',' ',' ','#'},
+                {'#',' ','#','#','#','X',' ',' ','#',' ','#',' ',' ',' ','#',' ','#','#','#','#',' ','#'},
+                {'#',' ',' ',' ','#','#','#','#','#',' ','#','#','#',' ','#',' ','#',' ',' ',' ',' ','#'},
+                {'#',' ','#',' ','#','X',' ',' ',' ',' ',' ',' ',' ',' ','#',' ','#',' ','#','#','X','#'},
+                {'#',' ','#',' ','#','#',' ','#','#','#',' ','#','#',' ',' ',' ','#',' ','#','*','#','#'},
+                {'#',' ','#',' ',' ','X',' ',' ','X','#',' ','#','#',' ','#','#','#',' ','X',' ',' ','#'},
+                {'#',' ','#',' ','#','#',' ','#',' ','#',' ','#','#',' ','#','#','#',' ','#','#',' ','#'},
+                {'#',' ','#',' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ','#',' ',' ',' ','X',' ',' ','#'},
+                {'#',' ','#',' ','#','#','#','#','#','#',' ','#','X','#','#',' ','#','#','#',' ','#','#'},
+                {'#',' ','#',' ','X',' ',' ',' ','#',' ',' ','#',' ',' ',' ',' ',' ',' ','#',' ',' ','#'},
+                {'#',' ','#','#','#','#','#',' ','#',' ','#','#',' ','#','#','#','#','X','#','#',' ','#'},
+                {'#',' ',' ',' ',' ',' ',' ',' ','#',' ',' ','X',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#'}
+            };
+            return map;
         }
     }
 }
