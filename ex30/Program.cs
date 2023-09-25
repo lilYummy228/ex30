@@ -74,12 +74,11 @@ namespace ex30
                     userPositionX = 1;
                     userPositionY = 1;
                 }
-                else if (map[userPositionX, userPositionY] == star)
-                {
-                    userPositionX = nextUserPositionX;
-                    userPositionY = nextUserPositionY;
-                    isStarTaken = false;
-                }
+            }
+
+            if (map[userPositionX, userPositionY] == star)
+            {
+                isStarTaken = false;
             }
 
             return isStarTaken;
@@ -87,23 +86,28 @@ namespace ex30
 
         static int[] GetDirection(ConsoleKeyInfo pressedKey)
         {
+            const ConsoleKey CommandUp = ConsoleKey.UpArrow;
+            const ConsoleKey CommandDown = ConsoleKey.DownArrow;
+            const ConsoleKey CommandLeft = ConsoleKey.LeftArrow;
+            const ConsoleKey CommandRight = ConsoleKey.RightArrow;
+
             int[] direction = { 0, 0 };
 
             switch (pressedKey.Key)
             {
-                case ConsoleKey.UpArrow:
+                case CommandUp:
                     direction[0] = -1;
                     break;
 
-                case ConsoleKey.DownArrow:
+                case CommandDown:
                     direction[0] = 1;
                     break;
 
-                case ConsoleKey.LeftArrow:
+                case CommandLeft:
                     direction[1] = -1;
                     break;
 
-                case ConsoleKey.RightArrow:
+                case CommandRight:
                     direction[1] = 1;
                     break;
             }
